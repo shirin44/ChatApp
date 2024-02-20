@@ -126,7 +126,7 @@ export default function Page(): JSX.Element {
         </div>
   
         {/* Bottom 10% */}
-        <div className="h-20 p-6 border-t border-black flex items-center justify-between">
+        <div className="h-20 p-6 border-t border-gray-500 flex items-center justify-between">
           {/* Icons on the left */}
           <div className="flex items-center space-x-6">
             <FontAwesomeIcon
