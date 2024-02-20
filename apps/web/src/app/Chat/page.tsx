@@ -46,6 +46,7 @@ export default function Page(): JSX.Element {
   const handlePersonClick = (person: Person) => {
     // Set the selected person when clicked
     setSelectedPerson(person);
+    
   };
 
   return (
@@ -59,6 +60,7 @@ export default function Page(): JSX.Element {
         handleFormSubmit={handleFormSubmit}
         handleModalCancel={handleModalCancel}
         handlePersonClick={handlePersonClick}
+        selectedPerson={selectedPerson}
       />
   
       {/* Main Chat Section */}

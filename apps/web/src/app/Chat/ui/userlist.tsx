@@ -2,7 +2,6 @@
 import React from "react";
 import { Button, Modal, Form, Input as AntInput } from "antd";
 import { Person } from "../page";
-
 interface UserListProps {
   people: Person[];
   isModalVisible: boolean;
@@ -11,6 +10,7 @@ interface UserListProps {
   handleFormSubmit: (values: any) => void;
   handleModalCancel: () => void;
   handlePersonClick: (person: Person) => void;
+  selectedPerson: Person | null;
 }
 
 const UserList: React.FC<UserListProps> = ({
@@ -21,6 +21,7 @@ const UserList: React.FC<UserListProps> = ({
   handleFormSubmit,
   handleModalCancel,
   handlePersonClick,
+  selectedPerson,
 }) => {
   return (
     <div className="w-1/4 bg-white border-r border-gray-300 p-4 overflow-y-auto">
@@ -45,7 +46,10 @@ const UserList: React.FC<UserListProps> = ({
       {people.map((person, index) => (
         <div
           key={index}
-          className="flex items-center space-x-4 mb-6 cursor-pointer transition-all duration-300 hover:bg-gray-200"
+          className={`flex items-center space-x-4 mb-6 cursor-pointer transition-all duration-300 ${
+            selectedPerson === person ? " bg-gray-400" : ""
+          } hover:bg-gray-200`}
+          
           onClick={() => handlePersonClick(person)}
         >
           <div className="w-14 h-14 bg-gray-300 rounded-full overflow-hidden">
@@ -55,9 +59,7 @@ const UserList: React.FC<UserListProps> = ({
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="font-bold text-black text-lg">
-            {person.name}
-          </span>
+          <span className="font-bold text-black text-lg">{person.name}</span>
         </div>
       ))}
     </div>
