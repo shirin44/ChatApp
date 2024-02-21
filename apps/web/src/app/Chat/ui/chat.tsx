@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideo, faPhone, faMicrophone, faImage, faPlus, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faVideo,
+  faPhone,
+  faMicrophone,
+  faImage,
+  faPlus,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { Person } from "../page";
-import {  Form, Input } from 'antd';
+import { Form, Input } from "antd";
 interface ChatProps {
   selectedPerson: Person | null;
 }
@@ -11,20 +18,17 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
   const [message, setMessage] = useState<string[]>([]);
   const [form] = Form.useForm();
   const handleReply = (event: any) => {
-
     const key = event?.key;
     const value = (event?.target as any)?.value;
     if (key === "Enter") {
       // Handle sending message here (e.g., call a function to send the message)
       console.log("Sending message:", message);
 
-     setMessage([value, ...message]);
+      setMessage([value, ...message]);
 
- // Clear the textarea after sending the message
-      
-     form.resetFields();
+      // Clear the textarea after sending the message
 
-     
+      form.resetFields();
     }
   };
 
@@ -62,12 +66,15 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
 
       {/* Middle 80% */}
       <div className="flex-1 overflow-y-auto p-6 text-black">
-        {/* Display messages */}
-        {message.map((msg, index) => (
-          <div key={index} className="mb-2">
-            {msg}
-          </div>
-        ))}
+        {/* Display messages in reverse order */}
+        {message
+          .slice()
+          .reverse()
+          .map((msg, index) => (
+            <div key={index} className="mb-2">
+              {msg}
+            </div>
+          ))}
       </div>
 
       {/* Bottom 10% */}
@@ -98,11 +105,10 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
         <Form form={form}>
           <Form.Item name="input-reply">
             <Input
-            onPressEnter={handleReply}
+              onPressEnter={handleReply}
               className="chat-reply"
               placeholder="Reply"
               autoFocus
-              
             />
           </Form.Item>
         </Form>
