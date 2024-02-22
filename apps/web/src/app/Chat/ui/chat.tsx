@@ -10,27 +10,67 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Person } from "../page";
 import { Form, Input } from "antd";
+
 interface ChatProps {
   selectedPerson: Person | null;
 }
 
+interface ChatMessage {
+  //add icon!!!
+  id: number;
+  sender: {
+    name: string;
+    icon: string; // URL or icon identifier
+  };
+  content: string;
+  timestamp: number;
+}
+
 const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
-  const [message, setMessage] = useState<string[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [form] = Form.useForm();
+
   const handleReply = (event: any) => {
     const key = event?.key;
     const value = (event?.target as any)?.value;
-    if (key === "Enter") {
-      // Handle sending message here (e.g., call a function to send the message)
-      console.log("Sending message:", message);
 
-      setMessage([value, ...message]);
-
-      // Clear the textarea after sending the message
-
-      form.resetFields();
-    }
-  };
+    if (key === "Enter" && value.trim() !== "") {
+        const newMessage: ChatMessage = {
+          id: Date.now(),
+          sender: {
+            name: "You",
+            icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
+          },
+          content: value.trim(),
+          timestamp: Date.now(),
+        };
+  
+        const newList = [...messages, newMessage].sort((pre, next) =>
+          pre.timestamp < next.timestamp ? -1 : 1
+        );
+  
+        setMessages(newList);
+        form.resetFields();
+      }
+    };
+    const handleLikeClick = () => {
+        const likeMessage: ChatMessage = {
+          id: Date.now(),
+          sender: {
+            name: "You",
+            icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
+          },
+          content: "👍", // Like emoji or any text you want to represent a like
+          timestamp: Date.now(),
+        };
+      
+        const newList = [...messages, likeMessage].sort((pre, next) =>
+          pre.timestamp < next.timestamp ? -1 : 1
+        );
+      
+        setMessages(newList);
+      };
+      
 
   return (
     <div className="flex-1 flex flex-col border border-black overflow-hidden">
@@ -66,15 +106,45 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
 
       {/* Middle 80% */}
       <div className="flex-1 overflow-y-auto p-6 text-black">
-        {/* Display messages in reverse order */}
-        {message
-          .slice()
-          .reverse()
-          .map((msg, index) => (
-            <div key={index} className="mb-2">
-              {msg}
+        {messages.slice().map((msg) => (
+          <div
+            key={msg.id}
+            className={`mb-2 flex ${
+              msg.sender.name === "You"
+                ? "items-end justify-end"
+                : "items-start"
+            }`}
+          >
+            {/* Sender's icon */}
+            <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+              <img
+                src={msg.sender.icon}
+                alt="Sender Icon"
+                className="w-full h-full object-cover"
+              />
             </div>
-          ))}
+
+            {/* Message bubble */}
+            <div
+              className={`${
+                msg.sender.name === "You" ? "bg-blue-500" : "bg-gray-300"
+              } p-3 rounded-lg`}
+            >
+              <div>
+                <strong>{msg.sender.name}:</strong> {msg.content}
+              </div>
+              <small>
+                {new Date(msg.timestamp).toLocaleString([], {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </small>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Bottom 10% */}
@@ -109,19 +179,23 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
               className="chat-reply"
               placeholder="Reply"
               autoFocus
+              aria-label="Type your reply"
             />
           </Form.Item>
         </Form>
 
         {/* Icons on the right */}
-        <div className="flex items-center space-x-6">
-          <FontAwesomeIcon
-            icon={faThumbsUp}
-            className="icon"
-            size="2x"
-            style={{ color: "black" }}
-          />
-        </div>
+       {/* Icons on the right */}
+<div className="flex items-center space-x-6">
+  <div className="icon" onClick={handleLikeClick}>
+    <FontAwesomeIcon
+      icon={faThumbsUp}
+      size="3x"
+      style={{ color: "black" }}
+    />
+  </div>
+</div>
+
       </div>
     </div>
   );
