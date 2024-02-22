@@ -45,7 +45,7 @@ const LINKS = [
 
 export default function Page(): JSX.Element {
   return (
-   <div className=" text-yellow-400">
+   <div className=" text-red-300">
     Hello Turbo with Tailwind, you should work otherwise i am going to be crazy
    </div>
   );
