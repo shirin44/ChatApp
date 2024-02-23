@@ -9,7 +9,10 @@ export class ChatsService {
 
   async create(createChatDto: any): Promise<Chat> {
     const createdChat = new this.chatModel(createChatDto);
-    return createdChat.save();
+    
+    const result = await createdChat.save();
+
+    return result;
   }
 
   async findAll(): Promise<Chat[]> {

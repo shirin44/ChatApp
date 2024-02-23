@@ -10,14 +10,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Person } from "../page";
 import { Form, Input } from "antd";
+import { v4 as uuidv4 } from "uuid";
+import { sendMessage } from "../../../services/chat.service";
 
 interface ChatProps {
   selectedPerson: Person | null;
 }
 
-interface ChatMessage {
-  //add icon!!!
-  id: number;
+export interface ChatMessage {
+  id: string;
   sender: {
     name: string;
     icon: string; // URL or icon identifier
@@ -35,42 +36,45 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
     const value = (event?.target as any)?.value;
 
     if (key === "Enter" && value.trim() !== "") {
-        const newMessage: ChatMessage = {
-          id: Date.now(),
-          sender: {
-            name: "You",
-            icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
-          },
-          content: value.trim(),
-          timestamp: Date.now(),
-        };
-  
-        const newList = [...messages, newMessage].sort((pre, next) =>
-          pre.timestamp < next.timestamp ? -1 : 1
-        );
-  
-        setMessages(newList);
-        form.resetFields();
-      }
-    };
-    const handleLikeClick = () => {
-        const likeMessage: ChatMessage = {
-          id: Date.now(),
-          sender: {
-            name: "You",
-            icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
-          },
-          content: "👍", // Like emoji or any text you want to represent a like
-          timestamp: Date.now(),
-        };
-      
-        const newList = [...messages, likeMessage].sort((pre, next) =>
-          pre.timestamp < next.timestamp ? -1 : 1
-        );
-      
-        setMessages(newList);
+      const newMessage: ChatMessage = {
+        id: uuidv4(),
+        sender: {
+          name: "You",
+          icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
+        },
+        content: value.trim(),
+        timestamp: Date.now(),
       };
-      
+
+      const newList = [...messages, newMessage].sort((pre, next) =>
+        pre.timestamp < next.timestamp ? -1 : 1
+      );
+      console.log("new ", newMessage);
+      setMessages(newList);
+      sendMessage(newMessage);
+      form.resetFields();
+    }
+    // Call the sendMessage function with the new message
+  };
+  const handleLikeClick = () => {
+    const likeMessage: ChatMessage = {
+      id: uuidv4(),
+      sender: {
+        name: "You",
+        icon: "https://i.pinimg.com/736x/a4/c3/0f/a4c30f5c16601d21c8ca047315022eb3.jpg",
+      },
+      content: "👍", // Like emoji or any text you want to represent a like
+      timestamp: Date.now(),
+    };
+
+    const newList = [...messages, likeMessage].sort((pre, next) =>
+      pre.timestamp < next.timestamp ? -1 : 1
+    );
+
+    setMessages(newList);
+    // Call the sendMessage function with the new message
+    sendMessage(likeMessage);
+  };
 
   return (
     <div className="flex-1 flex flex-col border border-black overflow-hidden">
@@ -150,6 +154,7 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
       {/* Bottom 10% */}
       <div className="h-20 p-6 border-t border-gray-500 flex items-center justify-between">
         {/* Icons on the left */}
+
         <div className="flex items-center space-x-6">
           <FontAwesomeIcon
             icon={faMicrophone}
@@ -185,17 +190,16 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
         </Form>
 
         {/* Icons on the right */}
-       {/* Icons on the right */}
-<div className="flex items-center space-x-6">
-  <div className="icon" onClick={handleLikeClick}>
-    <FontAwesomeIcon
-      icon={faThumbsUp}
-      size="3x"
-      style={{ color: "black" }}
-    />
-  </div>
-</div>
-
+        {/* Icons on the right */}
+        <div className="flex items-center space-x-6">
+          <div className="icon" onClick={handleLikeClick}>
+            <FontAwesomeIcon
+              icon={faThumbsUp}
+              size="3x"
+              style={{ color: "black" }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

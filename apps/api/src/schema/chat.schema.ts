@@ -1,19 +1,23 @@
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, SchemaType, SchemaTypes } from 'mongoose';
 export type ChatDocument = HydratedDocument<Chat>;
 @Schema()
 export class Chat {
+
     @Prop()
-    senderName: string;
-  
-    @Prop()
-    senderIcon: string;
+    id: string;
+
+    @Prop({type: SchemaTypes.Mixed})
+    sender: {
+      name: string;
+      icon: string;
+    };
   
     @Prop()
     content: string;
   
-    @Prop({  default: Date.now })
+    @Prop({ default: Date.now })
     timestamp: number;
 }
 
