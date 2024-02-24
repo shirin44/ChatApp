@@ -4,11 +4,17 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatsModule } from './chat.module/chats.module';
 import { RouterModule, Routes } from '@nestjs/core';
+import { AccountsModule } from './account/accounts.module';
 
 const routes: Routes = [
   {
     path: '/chat',
     module: ChatsModule
+  }
+  ,
+  {
+    path: '/account',
+    module: AccountsModule
   }
 ]
 
@@ -17,6 +23,7 @@ const routes: Routes = [
     MongooseModule.forRoot('mongodb://localhost:27017/shirin'),
     RouterModule.register(routes),
     ChatsModule,
+    AccountsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

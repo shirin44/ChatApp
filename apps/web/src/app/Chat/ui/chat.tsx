@@ -54,7 +54,7 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
       sendMessage(newMessage);
       form.resetFields();
     }
-    // Call the sendMessage function with the new message
+
   };
   const handleLikeClick = () => {
     const likeMessage: ChatMessage = {

@@ -8,7 +8,11 @@ export class ChatsService {
   constructor(@InjectModel(Chat.name) private chatModel: Model<Chat>) {}
 
   async create(createChatDto: any): Promise<Chat> {
+
+    console.log('chat', this.chatModel)
     const createdChat = new this.chatModel(createChatDto);
+
+    console.log('chat', createdChat)
     
     const result = await createdChat.save();
 
