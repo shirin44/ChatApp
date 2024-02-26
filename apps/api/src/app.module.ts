@@ -13,7 +13,7 @@ const routes: Routes = [
   }
   ,
   {
-    path: '/account',
+    path: '/accounts',
     module: AccountsModule
   }
 ]

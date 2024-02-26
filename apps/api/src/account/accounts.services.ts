@@ -15,4 +15,7 @@ export class AccountsService {
   async findAll(): Promise<Account[]> {
     return this.accountModel.find().exec();
   }
+  // async checkLogin(): Promise<boolean[]> {
+  //   return this.accountModel.find().exec();
+  // }
 }

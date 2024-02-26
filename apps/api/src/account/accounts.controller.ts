@@ -15,4 +15,8 @@ export class AccountsController {
   createAccount(@Body() createAccountDto: any): Promise<any> {
     return this.accountsService.create(createAccountDto);
   }
+  @Post('login')
+  login(@Body() createAccountDto: any): Promise<boolean> {
+    return true as any
+  }
 }
