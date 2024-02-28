@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AccountsService } from './accounts.services';
+import { request } from 'http';
 
 
 @Controller()
@@ -16,8 +17,10 @@ export class AccountsController {
     return this.accountsService.create(createAccountDto);
   }
   @Post('login')
-  login(@Body() createAccountDto: any): Promise<boolean> {
-    return true as any
+ async login(@Body() request: any): Promise<boolean> {
+    const isValid = await this.accountsService.checkLogin(request);
+
+    return isValid;
   }
   // @Post('login')
   // async login(@Body() credentials: any, @Res() res: Response): Promise<void> {

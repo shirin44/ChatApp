@@ -16,6 +16,9 @@ export class Account {
 
   @Prop({ default: false })
   remember: boolean;
+  
+  @Prop() 
+  profileImageUrl: string
 
   // Add any other fields you need for your account here
 

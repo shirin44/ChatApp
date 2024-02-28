@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ChatsService } from './chats.service';
 
 @Controller()
@@ -9,6 +9,11 @@ export class ChatsController {
   hello(): string {
     return 'Hello chat';
   }
+  @Get(':userId')
+  getAllChats(@Param('userId')userId: string): Promise<any[]> {
+    return this.chatsService.getChatByUserId(userId);
+  }
+  
 
   @Get('/bye')
   sayGoodBy(): string {

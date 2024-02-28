@@ -19,7 +19,7 @@ export class ChatsService {
     return result;
   }
 
-  async findAll(): Promise<Chat[]> {
-    return this.chatModel.find().exec();
+  async getChatByUserId(userId: string): Promise<Chat[]> {
+    return this.chatModel.find({receiverId: userId}).exec();
   }
 }

@@ -2,6 +2,7 @@
 import React from "react";
 import { Button, Modal, Form, Input as AntInput } from "antd";
 import { Person } from "../page";
+import { Account } from "../../register/page";
 interface UserListProps {
   people: Person[];
   isModalVisible: boolean;
@@ -11,6 +12,7 @@ interface UserListProps {
   handleModalCancel: () => void;
   handlePersonClick: (person: Person) => void;
   selectedPerson: Person | null;
+  accounts: Account[];
 }
 
 const UserList: React.FC<UserListProps> = ({
@@ -22,6 +24,7 @@ const UserList: React.FC<UserListProps> = ({
   handleModalCancel,
   handlePersonClick,
   selectedPerson,
+  accounts,
 }) => {
   return (
     <div className="w-1/4 bg-white border-r border-gray-300 p-4 overflow-y-auto">

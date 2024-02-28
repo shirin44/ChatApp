@@ -15,6 +15,8 @@ import { sendMessage } from "../../../services/chat.service";
 
 interface ChatProps {
   selectedPerson: Person | null;
+  chatMessages: ChatMessage[];
+  refresh: () => Promise<void>; 
 }
 
 export interface ChatMessage {
@@ -25,17 +27,21 @@ export interface ChatMessage {
   };
   content: string;
   timestamp: number;
+  receiverId: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
+const Chat: React.FC<ChatProps> = ({ selectedPerson ,chatMessages,refresh }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [form] = Form.useForm();
 
+
   const handleReply = (event: any) => {
+    refresh()
     const key = event?.key;
     const value = (event?.target as any)?.value;
 
     if (key === "Enter" && value.trim() !== "") {
+      refresh()
       const newMessage: ChatMessage = {
         id: uuidv4(),
         sender: {
@@ -44,6 +50,7 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
         },
         content: value.trim(),
         timestamp: Date.now(),
+        receiverId: selectedPerson?.id || "",
       };
 
       const newList = [...messages, newMessage].sort((pre, next) =>
@@ -53,11 +60,15 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
       setMessages(newList);
       sendMessage(newMessage);
       form.resetFields();
+      refresh()
     }
+    
 
   };
   const handleLikeClick = () => {
+    refresh()
     const likeMessage: ChatMessage = {
+      
       id: uuidv4(),
       sender: {
         name: "You",
@@ -65,11 +76,15 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
       },
       content: "👍", // Like emoji or any text you want to represent a like
       timestamp: Date.now(),
+     
+      receiverId: selectedPerson?.id || "",
     };
+    refresh()
 
     const newList = [...messages, likeMessage].sort((pre, next) =>
       pre.timestamp < next.timestamp ? -1 : 1
     );
+    refresh()
 
     setMessages(newList);
     // Call the sendMessage function with the new message
@@ -110,7 +125,7 @@ const Chat: React.FC<ChatProps> = ({ selectedPerson }) => {
 
       {/* Middle 80% */}
       <div className="flex-1 overflow-y-auto p-6 text-black">
-        {messages.slice().map((msg) => (
+        {chatMessages.slice().map((msg) => (
           <div
             key={msg.id}
             className={`mb-2 flex ${

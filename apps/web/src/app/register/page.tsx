@@ -17,10 +17,12 @@ const onFinishFailed = (errorInfo: any) => {
 const handlesubmitclick = async (values: FieldType) => {
   try {
     const account: Account = {
-      username: values?.username || '',
-      password: values?.password || '',
-      phoneNumber: values?.phoneNumber || '',
+      _id: "",
+      username: values?.username || "",
+      password: values?.password || "",
+      phoneNumber: values?.phoneNumber || "",
       remember: values?.remember === "true",
+      profileImageUrl: values?.profileImageUrl || "",
     };
 
     await createAccount(account);
@@ -34,17 +36,18 @@ const handlesubmitclick = async (values: FieldType) => {
 type FieldType = {
   username?: string;
   password?: string;
-  phoneNumber?: string; 
+  phoneNumber?: string;
   remember?: string;
+  profileImageUrl?: string;
 };
 export interface Account {
+  _id: string; 
   username: string;
   password: string;
   phoneNumber: string;
   remember: boolean;
-  
+  profileImageUrl: string;
 }
-
 
 const normFile = (e: any) => {
   console.log("File:", e);
@@ -53,7 +56,6 @@ const normFile = (e: any) => {
   }
   return e && e.fileList;
 };
-
 
 const App: React.FC = () => {
   return (
@@ -118,6 +120,13 @@ const App: React.FC = () => {
         >
           <Input style={{ fontSize: "20px" }} />
         </Form.Item>
+        <Form.Item<FieldType>
+          label="Profile Image URL"
+          name={["profileImageUrl"]} // Wrap the field name in an array
+          rules={[{ required: true, message: "Please input the image URL!" }]}
+        >
+          <Input style={{ fontSize: "20px" }} />
+        </Form.Item>
 
         <Form.Item<FieldType>
           name="remember"
@@ -125,22 +134,6 @@ const App: React.FC = () => {
           wrapperCol={{ offset: 8, span: 16 }}
         >
           <Checkbox style={{ fontSize: "20px" }}>Remember me</Checkbox>
-        </Form.Item>
-
-        <Form.Item
-          label="Upload Image"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <Upload action="/upload.do" listType="picture-card">
-            <button style={{ border: 0, background: "none" }} type="button">
-              <FontAwesomeIcon
-                icon={faUpload}
-                style={{ fontSize: "24px", marginRight: "8px" }}
-              />
-              <div style={{ marginTop: 8, fontSize: "18px" }}>Upload Image</div>
-            </button>
-          </Upload>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -153,7 +146,6 @@ const App: React.FC = () => {
               border: "none",
               cursor: "pointer",
             }}
-            
             onMouseOver={(e) => (e.currentTarget.style.background = "pink")}
             onMouseOut={(e) => (e.currentTarget.style.background = "black")}
           >

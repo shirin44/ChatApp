@@ -1,9 +1,44 @@
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
+import axios from "axios";
+import { login } from "../../services/account.service";
 
 
 const App: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const onFinish = (values: FieldType) => {
+    console.log("Success:", values);
+    handleloginclick(values);
+  };
+  
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+  
+  type FieldType = {
+    username?: string;
+    password?: string;
+   
+  };
+  const handleloginclick = async (values: FieldType) => {
+    try {
+      const isValid = await login(values)
+  
+      if (isValid) {
+        window.location.href = "/chat";
+      } else {
+        alert("Invalid username or password");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Error during login. Please try again.");
+    }
+  };
+  
+
+
   return (
     <div
       style={{
@@ -33,15 +68,16 @@ const App: React.FC = () => {
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 800 }}
         initialValues={{ remember: true }}
-        
         autoComplete="off"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           label="Username"
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input style={{ fontSize: "20px" }} />
+          <Input style={{ fontSize: "20px" }} onChange={(e) => setUsername(e.target.value)} />
         </Form.Item>
 
         <Form.Item
@@ -49,10 +85,8 @@ const App: React.FC = () => {
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password style={{ fontSize: "20px" }} />
+          <Input.Password style={{ fontSize: "20px" }} onChange={(e) => setPassword(e.target.value)} />
         </Form.Item>
-
-       
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button
@@ -64,7 +98,6 @@ const App: React.FC = () => {
               border: "none",
               cursor: "pointer",
             }}
-           
           >
             Login
           </Button>

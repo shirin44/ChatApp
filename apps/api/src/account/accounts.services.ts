@@ -15,7 +15,14 @@ export class AccountsService {
   async findAll(): Promise<Account[]> {
     return this.accountModel.find().exec();
   }
-  // async checkLogin(): Promise<boolean[]> {
-  //   return this.accountModel.find().exec();
-  // }
+
+  async checkLogin(request: {username: string, password: string}): Promise<boolean> {
+    const result = await this.accountModel.findOne({
+      username: request?.username,
+      password: request?.password
+    }).lean().exec() as any;
+
+
+    return result?._id ? true : false
+  }
 }

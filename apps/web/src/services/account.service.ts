@@ -14,3 +14,10 @@ export const createAccount = async (account: Account): Promise<string> => {
     data: account
   });
 }
+
+export const login = async (account: any): Promise<string> => {
+  return await httpClient('accounts/login', {
+    method: 'POST',
+    data: account
+  });
+}
