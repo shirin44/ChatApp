@@ -4,6 +4,8 @@ import { HydratedDocument, SchemaType, SchemaTypes } from 'mongoose';
 export type AccountDocument = HydratedDocument<Account>;
 @Schema()
 export class Account {
+  @Prop() 
+  _id: string
 
     @Prop({ required: true })
   username: string;
@@ -20,9 +22,7 @@ export class Account {
   @Prop() 
   profileImageUrl: string
 
-  // Add any other fields you need for your account here
-
-  // Timestamps for created and updated at
+ 
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 
