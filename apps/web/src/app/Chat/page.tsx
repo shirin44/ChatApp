@@ -26,19 +26,23 @@ export default function Page(): JSX.Element {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [form] = Form.useForm();
 
-  useEffect( () => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") as any) ;
 
-   
+
+  useEffect(() => {
     const fetchAccounts = async () => {
       try {
-
         const accountsData = await getAllAccounts();
     
-        const newPeople = accountsData.map((account) => ({
-          id: account._id, // Assuming your account model has a unique identifier field
-          name: account.username,
-          imageUrl: account.profileImageUrl || "",
-        }));
+        const loggedInUsername = currentUser.username;
+    
+        const newPeople = accountsData
+          .filter((account) => account.username !== loggedInUsername) 
+          .map((account) => ({
+            id: account._id,
+            name: account.username,
+            imageUrl: account.profileImageUrl || "",
+          }));
     
         setPeople(newPeople);
         setAccounts(accountsData);
@@ -47,26 +51,27 @@ export default function Page(): JSX.Element {
       }
     };
     
+    
     fetchAccounts();
   }, []);
+  
 
-  useEffect( () => {
-
+  useEffect(() => {
     const fetchChat = async () => {
       try {
-
         if (selectedPerson) {
-          const chatData: ChatMessage[] = await getChat(selectedPerson.id);
-    
-          setChatMessages(chatData);
+          // Fetch all messages
+          const allChatData: ChatMessage[] = await getChat(currentUser?._id, selectedPerson.id);
+  
+          setChatMessages(allChatData);
         }
       } catch (error) {
         console.error("Error fetching chat:", error);
       }
     };
-    
+  
     fetchChat();
-  }, [selectedPerson?.id]);
+  }, [selectedPerson?.id, currentUser._id]);
 
   
   const handleAddButtonClick = () => {
@@ -90,7 +95,7 @@ export default function Page(): JSX.Element {
     setSelectedPerson(person);
 
     try {
-      const chatData = await getChat(person.id);
+      const chatData = await getChat(currentUser._id,person.id);
       setChatMessages(chatData);
     } catch (error) {
       console.error("Error fetching chat:", error);
@@ -99,7 +104,7 @@ export default function Page(): JSX.Element {
 
   const onRefreshChat = async () => {
     try {
-      const chatData: ChatMessage[] = await getChat(selectedPerson?.id || '');
+      const chatData: ChatMessage[] = await getChat(currentUser._id,selectedPerson?.id || '');
       setChatMessages(chatData);
     } catch (error) {
       console.error("Error fetching chat:", error);
@@ -108,7 +113,8 @@ export default function Page(): JSX.Element {
   
 
   return (
-    <div className="flex h-screen bg-gray-200">
+    <div className="flex h-screen bg-white"style={{ background: `url('https://img.freepik.com/premium-vector/corner-frame-illustration-pink-cherry-blossoms_623790-40.jpg')no-repeat ` 
+    ,backgroundSize: 'cover',}}>
       <Userlist
         people={people}
         isModalVisible={isModalVisible}

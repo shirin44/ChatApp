@@ -19,6 +19,9 @@ export class Chat {
 
     @Prop()
     receiverId: string;
+    
+    @Prop()
+    senderId: string;
   
     @Prop({ default: Date.now })
     timestamp: number;

@@ -17,10 +17,10 @@ export class AccountsController {
     return this.accountsService.create(createAccountDto);
   }
   @Post('login')
- async login(@Body() request: any): Promise<boolean> {
-    const isValid = await this.accountsService.checkLogin(request);
+ async login(@Body() request: any): Promise<any> {
+    const result = await this.accountsService.login(request);
 
-    return isValid;
+    return result;
   }
   // @Post('login')
   // async login(@Body() credentials: any, @Res() res: Response): Promise<void> {

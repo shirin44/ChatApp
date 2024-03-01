@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 import { login } from "../../services/account.service";
-
+import { test } from "node:test";
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -12,21 +12,22 @@ const App: React.FC = () => {
     console.log("Success:", values);
     handleloginclick(values);
   };
-  
+
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-  
+
   type FieldType = {
     username?: string;
     password?: string;
-   
   };
   const handleloginclick = async (values: FieldType) => {
     try {
-      const isValid = await login(values)
-  
-      if (isValid) {
+      const result = await login(values);
+
+      if (result?.valid) {
+        localStorage.setItem("currentUser", JSON.stringify(result?.account));
+
         window.location.href = "/chat";
       } else {
         alert("Invalid username or password");
@@ -36,8 +37,6 @@ const App: React.FC = () => {
       alert("Error during login. Please try again.");
     }
   };
-  
-
 
   return (
     <div
@@ -77,7 +76,10 @@ const App: React.FC = () => {
           name="username"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input style={{ fontSize: "20px" }} onChange={(e) => setUsername(e.target.value)} />
+          <Input
+            style={{ fontSize: "20px" }}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </Form.Item>
 
         <Form.Item
@@ -85,7 +87,10 @@ const App: React.FC = () => {
           name="password"
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input.Password style={{ fontSize: "20px" }} onChange={(e) => setPassword(e.target.value)} />
+          <Input.Password
+            style={{ fontSize: "20px" }}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

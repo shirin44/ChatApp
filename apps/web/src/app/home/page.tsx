@@ -33,13 +33,13 @@ const App: React.FC = () => {
           fontSize: "36px",
         }}
       >
-        Welcome to the Chat App
+        Welcome to the Yapping App
       </h1>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          width: "400px", // Adjust the total width as needed
+          width: "400px", 
         }}
       >
         <Button

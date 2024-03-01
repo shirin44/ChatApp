@@ -7,7 +7,7 @@ export class Account {
   @Prop() 
   _id: string
 
-    @Prop({ required: true })
+    @Prop({ required: true})
   username: string;
 
   @Prop({ required: true })

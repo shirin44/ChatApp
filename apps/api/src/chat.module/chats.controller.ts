@@ -5,15 +5,13 @@ import { ChatsService } from './chats.service';
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
-  @Get()
-  hello(): string {
-    return 'Hello chat';
+  @Get(':currentUserId/:receiverId')
+  getAllChats(
+    @Param('currentUserId') currentUserId: string,
+    @Param('receiverId') receiverId: string,
+  ): Promise<any[]> {
+    return this.chatsService.getChatByForUser(currentUserId, receiverId);
   }
-  @Get(':userId')
-  getAllChats(@Param('userId')userId: string): Promise<any[]> {
-    return this.chatsService.getChatByUserId(userId);
-  }
-  
 
   @Get('/bye')
   sayGoodBy(): string {
@@ -22,6 +20,6 @@ export class ChatsController {
 
   @Post()
   create(@Body() request: any): any {
-    return this.chatsService.create(request)
+    return this.chatsService.create(request);
   }
 }

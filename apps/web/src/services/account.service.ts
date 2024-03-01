@@ -15,7 +15,7 @@ export const createAccount = async (account: Account): Promise<string> => {
   });
 }
 
-export const login = async (account: any): Promise<string> => {
+export const login = async (account: any): Promise<any> => {
   return await httpClient('accounts/login', {
     method: 'POST',
     data: account

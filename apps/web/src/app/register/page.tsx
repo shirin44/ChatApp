@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { createAccount } from "../../services/account.service";
 
+import { v4 as uuidv4 } from "uuid";
+
 const onFinish = (values: FieldType) => {
   console.log("Success:", values);
   handlesubmitclick(values);
@@ -17,7 +19,7 @@ const onFinishFailed = (errorInfo: any) => {
 const handlesubmitclick = async (values: FieldType) => {
   try {
     const account: Account = {
-      _id: "",
+      _id: uuidv4(),
       username: values?.username || "",
       password: values?.password || "",
       phoneNumber: values?.phoneNumber || "",
@@ -27,9 +29,18 @@ const handlesubmitclick = async (values: FieldType) => {
 
     await createAccount(account);
 
-    console.log("Account created successfully!");
-  } catch (error) {
-    console.error("Error creating account:", error);
+    alert("Account created successfully!");
+    window.location.href = "/login";
+  } catch (error: any) {
+    if (error.response && error.response.status === 409) {
+
+      const errorMessage =
+        (error.response.data.message as string) || "Username is already taken";
+      alert(`Error creating account: ${errorMessage}`);
+    } else {
+
+      alert(`Error creating account: ${error}`);
+    }
   }
 };
 
@@ -41,7 +52,7 @@ type FieldType = {
   profileImageUrl?: string;
 };
 export interface Account {
-  _id: string; 
+  _id: string;
   username: string;
   password: string;
   phoneNumber: string;

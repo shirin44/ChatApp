@@ -27,7 +27,7 @@ const UserList: React.FC<UserListProps> = ({
   accounts,
 }) => {
   return (
-    <div className="w-1/4 bg-white border-r border-gray-300 p-4 overflow-y-auto">
+    <div className=" w-1/5 border-r border-gray-300 p-4 overflow-y-auto">
       <div className="text-3xl font-bold mb-4 text-black text-center border-b-4 border-gray-300">
         Chats <span className="text-gray-500">({people.length})</span>{" "}
         <Button
